@@ -12,16 +12,19 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install Buildozer Dependencies
+      - name: Install Linux Build Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libsqlite3-dev lld libffi-dev autoconf libtool
+          sudo apt-get install -y git zip unzip openjdk-17-jdk autoconf libtool pkg-config zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev sqlite3 bzip2 libbz2-dev liblzma-dev textinfo lld
 
-      - name: Build with Buildozer
-        uses: ArtemSBulgakov/buildozer-action@v1
-        with:
-          workdir: .
-          buildozer_version: stable
+      - name: Install Buildozer & Cython Natively
+        run: |
+          pip install --upgrade pip
+          pip install buildozer cython
+
+      - name: Run Buildozer Engine
+        run: |
+          yes | buildozer android debug
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
